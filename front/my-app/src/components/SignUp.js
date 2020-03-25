@@ -6,6 +6,7 @@ class SignUp extends Component {
     this.state = {
       email: "",
       password: "",
+      checkPassword: "",
       name: "",
       lastName: ""
     };
@@ -32,7 +33,12 @@ class SignUp extends Component {
           email
         </label>
         <br />
-        <input type="email" name="email" onChange={this.updateEmailField} />
+        <input
+          type="email"
+          name="email"
+          onChange={this.updateEmailField}
+          value={this.state.email}
+        />
         <br />
         <label id="password" htmlFor="password">
           password
@@ -42,6 +48,7 @@ class SignUp extends Component {
           type="password"
           name="password"
           onChange={this.updateEmailField}
+          value={this.state.password}
         />
         <br />
         <label id="checkPassword" htmlFor="checkPassword">
@@ -49,22 +56,33 @@ class SignUp extends Component {
         </label>
         <br />
         <input
-          type="password"
+          type="checkPassword"
           name="checkPassword"
           onChange={this.updateEmailField}
+          value={this.state.checkPassword}
         />
         <br />
         <label id="name" htmlFor="name">
           name
         </label>
         <br />
-        <input type="text" name="name" onChange={this.updateEmailField} />
+        <input
+          type="text"
+          name="name"
+          onChange={this.updateEmailField}
+          value={this.state.name}
+        />
         <br />
         <label id="lastName" htmlFor="lastName">
           last name
         </label>
         <br />
-        <input type="text" name="lastName" onChange={this.updateEmailField} />
+        <input
+          type="text"
+          name="lastName"
+          onChange={this.updateEmailField}
+          value={this.state.lastName}
+        />
         <br />
         <input type="submit" value="Submit" />
       </form>
