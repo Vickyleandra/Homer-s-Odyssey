@@ -1,91 +1,96 @@
-import React, { Component } from "react";
+import React from "react";
 
-class SignUp extends Component {
+class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
-      checkPassword: "",
+      verifyPassword: "",
       name: "",
-      lastName: ""
+      lastName: "",
+      flash: ""
     };
     this.updateEmailField = this.updateEmailField.bind(this);
+    this.updatePasswordField = this.updatePasswordField.bind(this);
+    this.updateVerifyPasswordField = this.updateVerifyPasswordField.bind(this);
+    this.updateNameField = this.updateNameField.bind(this);
+    this.updateLastNameField = this.updateLastNameField.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   updateEmailField(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
+    this.setState({ email: event.target.value });
+  }
+  updatePasswordField(event) {
+    this.setState({ password: event.target.value });
+  }
+  updateVerifyPasswordField(event) {
+    this.setState({ verifyPassword: event.target.value });
+  }
+  updateNameField(event) {
+    this.setState({ name: event.target.value });
   }
 
-  handleSubmit(event) {
-    console.log(JSON.stringify(this.state, 1, 1));
-    event.preventDefault();
+  updateLastNameField(event) {
+    this.setState({ lastName: event.target.value });
   }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    fetch("/auth/signup", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify(this.state)
+    })
+      .then(res => res.json())
+      .then(
+        res => this.setState({ flash: res.flash }),
+        err => this.setState({ flash: err.flash })
+      );
+  };
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <h1>{JSON.stringify(this.state, 1, 1)}</h1>
-        <label id="email" htmlFor="email">
-          email
-        </label>
-        <br />
-        <input
-          type="email"
-          name="email"
-          onChange={this.updateEmailField}
-          value={this.state.email}
-        />
-        <br />
-        <label id="password" htmlFor="password">
-          password
-        </label>
-        <br />
-        <input
-          type="password"
-          name="password"
-          onChange={this.updateEmailField}
-          value={this.state.password}
-        />
-        <br />
-        <label id="checkPassword" htmlFor="checkPassword">
-          verify password
-        </label>
-        <br />
-        <input
-          type="checkPassword"
-          name="checkPassword"
-          onChange={this.updateEmailField}
-          value={this.state.checkPassword}
-        />
-        <br />
-        <label id="name" htmlFor="name">
-          name
-        </label>
-        <br />
-        <input
-          type="text"
-          name="name"
-          onChange={this.updateEmailField}
-          value={this.state.name}
-        />
-        <br />
-        <label id="lastName" htmlFor="lastName">
-          last name
-        </label>
-        <br />
-        <input
-          type="text"
-          name="lastName"
-          onChange={this.updateEmailField}
-          value={this.state.lastName}
-        />
-        <br />
-        <input type="submit" value="Submit" />
-      </form>
+      <React.Fragment>
+        <h1>{JSON.stringify(this.state)}</h1>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            value={this.state.email}
+            onChange={this.updateEmailField}
+          />
+          <input
+            type="text"
+            name="password"
+            value={this.state.password}
+            onChange={this.updatePasswordField}
+          />
+          <input
+            type="text"
+            name="verifyPassword"
+            value={this.state.verifyPassword}
+            onChange={this.updateVerifyPasswordField}
+          />
+          <input
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.updateNameField}
+          />
+          <input
+            type="text"
+            name="lastName"
+            value={this.state.lastName}
+            onChange={this.updateLastNameField}
+          />
+
+          <input type="submit" value="Submit" />
+        </form>
+      </React.Fragment>
     );
   }
 }
