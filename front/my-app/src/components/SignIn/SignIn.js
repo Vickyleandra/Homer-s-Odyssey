@@ -1,109 +1,98 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import { Link, Redirect } from "react-router-dom";
-import "../SignUp/signUp.css";
-
-class SignUp extends React.Component {
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
-      redirect: false
+      login: false
     };
     this.updateEmailField = this.updateEmailField.bind(this);
     this.updatePasswordField = this.updatePasswordField.bind(this);
-    this.setRedirect = this.setRedirect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  updatePasswordField(e) {
-    this.setState({ password: e.target.value });
+  updateEmailField(event) {
+    this.setState({ email: event.target.value });
   }
-
-  updateEmailField(e) {
-    this.setState({ email: e.target.value });
+  updatePasswordField(event) {
+    this.setState({ password: event.target.value });
   }
-
-  setRedirect = () => {
-    this.setState({ redirect: true });
-  };
-
-  renderRedirect = () => {
-    if (this.state.redirect === true) {
-      return <Redirect to="/profile" />;
-    }
-  };
-
   handleSubmit = e => {
-    // console.log(`A form was submitted ${JSON.stringify(this.state)}`);
     e.preventDefault();
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
     fetch("/auth/signin", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json"
       }),
-      body: JSON.stringify(this.state)
+      body: JSON.stringify(user)
     })
       .then(res => res.json())
-      .then(
-        res => this.setState({ flash: res.flash }),
-        err => this.setState({ flash: err.flash })
-      );
-    this.setState({ open: false });
+      .then(data => {
+        if (data.hasOwnProperty("user")) {
+          this.setState({ login: true });
+          console.log(data.token);
+        } else {
+          this.setState({ flash: data.message });
+          console.log(this.state.flash);
+        }
+      })
+      .catch(err => this.setState({ flash: err.flash }));
   };
-
   render() {
+    if (this.state.login === true) {
+      return <Redirect to="/profile" />;
+    }
     return (
-      <div className="signup-container">
-        <div className="sign-up">
-          <h2>Sign In</h2>
-          <form onSubmit={this.handleSubmit} className="signup-form">
-            <div>
-              <TextField
-                label="Email"
-                id="email"
-                type="email"
-                name="email"
-                fullWidth
-                value={this.state.email}
-                onChange={this.updateEmailField}
-              />
-            </div>
-
-            <div>
-              <TextField
-                label="Password"
-                id="password"
-                type="password"
-                name="password"
-                fullWidth
-                value={this.state.password}
-                onChange={this.updatePasswordField}
-              />
-            </div>
-
-            <div className="buttonstyle">
-              {this.renderRedirect()}
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={this.setRedirect}
-              >
-                Login
-              </Button>
-            </div>
-            <div className="buttonstyle">
-              <Button variant="contained" color="secondary">
-                <Link to="/signup">Sign Up!!</Link>
-              </Button>
-            </div>
-          </form>
-        </div>
+      <div className="sign_in">
+        <h1>Sign In!</h1>
+        <form
+          onSubmit={this.handleSubmit}
+          className="sign_in_form"
+          action="/signin"
+          method="post"
+        >
+          <div>
+            <TextField
+              type="email"
+              label="E-mail"
+              name="email"
+              value={this.state.email}
+              onChange={this.updateEmailField}
+            />
+          </div>
+          <div>
+            <TextField
+              type="text"
+              label="Password"
+              name="password"
+              value={this.state.password}
+              onChange={this.updatePasswordField}
+            />
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              color="secondary"
+              type="submit"
+              value="Submit"
+              onClick={this.handleSubmit}
+            >
+              Submit
+            </Button>
+            <Button variant="outlined" color="secondary">
+              <Link to="/signup">Sign Up!</Link>
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
 }
-
-export default SignUp;
+export default SignIn;
