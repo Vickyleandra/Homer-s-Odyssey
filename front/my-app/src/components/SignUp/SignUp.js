@@ -3,6 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { SnackbarContent } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
+import "./signUp.css";
+
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
@@ -21,21 +23,27 @@ class SignUp extends React.Component {
     this.updatePasswordConfField = this.updatePasswordConfField.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   updateNameField(e) {
     this.setState({ name: e.target.value });
   }
+
   updateLastNameField(e) {
     this.setState({ lastName: e.target.value });
   }
+
   updatePasswordField(e) {
     this.setState({ password: e.target.value });
   }
+
   updatePasswordConfField(e) {
     this.setState({ passwordConf: e.target.value });
   }
+
   updateEmailField(e) {
     this.setState({ email: e.target.value });
   }
+
   handleSubmit = e => {
     // console.log(`A form was submitted ${JSON.stringify(this.state)}`);
     e.preventDefault();
@@ -53,9 +61,10 @@ class SignUp extends React.Component {
       );
     this.setState({ open: false });
   };
+
   render() {
     return (
-      <React.Fragment>
+      <div className="signup-container">
         <div className="sign-up">
           <h2>Sign up</h2>
           <form onSubmit={this.handleSubmit} className="signup-form">
@@ -70,6 +79,7 @@ class SignUp extends React.Component {
                 onChange={this.updateNameField}
               />
             </div>
+
             <div>
               <TextField
                 label="Last Name"
@@ -92,6 +102,7 @@ class SignUp extends React.Component {
                 onChange={this.updatePasswordField}
               />
             </div>
+
             <div>
               <TextField
                 label="Password Confirmed"
@@ -103,6 +114,7 @@ class SignUp extends React.Component {
                 onChange={this.updatePasswordConfField}
               />
             </div>
+
             <div>
               <TextField
                 label="Email"
@@ -125,17 +137,19 @@ class SignUp extends React.Component {
             </div>
           </form>
         </div>
-        <div className="snackbar">
+
+        <div className="snackbarstyle">
           {/* {this.state.flash && <p>{this.state.flash}</p>} */}
-          {this.state.flash ? (
+          {this.state.flash && (
             <SnackbarContent
               anchorOrigin={"bottom, center"}
               message={this.state.flash}
             />
-          ) : null}
+          )}
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
+
 export default SignUp;
