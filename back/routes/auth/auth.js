@@ -11,7 +11,7 @@ router.post("/signup", function(req, res, next) {
     email: req.body.email,
     password: req.body.password,
     name: req.body.name,
-    lastname: req.body.lastname
+    lastName: req.body.lastName
   };
   connection.query("INSERT INTO users SET ?", user, function(
     error,
